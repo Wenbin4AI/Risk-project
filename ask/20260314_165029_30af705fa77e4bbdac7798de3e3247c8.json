@@ -1,0 +1,8 @@
+{
+    "callback_url": "http://127.0.0.1:36801/api/notify/processImage/reportNotify/1989152798487511041",
+    "image_url": "https://safety-analysis.tos-cn-hongkong.bytepluses.com/VID_20251115_093522_02/image/3.jpg",
+    "objectKey": "VID_20251115_093522_02/change/1989152798487511041",
+    "device_type": "X4",
+    "lang": "ch",
+    "image_type": "02"
+}
