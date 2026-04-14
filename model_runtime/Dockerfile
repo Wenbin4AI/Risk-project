@@ -19,7 +19,7 @@ COPY download_model.py /app/download_model.py
 COPY server.py /app/server.py
 
 ENV MODEL_ID=Qwen/Qwen2.5-VL-7B-Instruct
-ENV MODEL_DIR=/models
+ENV MODEL_PATH=/models/Qwen/Qwen2.5-VL-7B-Instruct
 
 RUN mkdir -p /models
 

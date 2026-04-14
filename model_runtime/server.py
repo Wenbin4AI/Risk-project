@@ -2,7 +2,7 @@ import os
 import time
 import uuid
 from io import BytesIO
-from typing import List, Optional
+from typing import Optional
 
 import requests
 import torch
@@ -14,8 +14,8 @@ from qwen_vl_utils import process_vision_info
 
 app = FastAPI()
 
+MODEL_PATH = os.getenv("MODEL_PATH", "/models/Qwen/Qwen2.5-VL-7B-Instruct")
 MODEL_ID = os.getenv("MODEL_ID", "Qwen/Qwen2.5-VL-7B-Instruct")
-MODEL_DIR = os.getenv("MODEL_DIR", "/models")
 TORCH_DTYPE = os.getenv("TORCH_DTYPE", "auto")
 
 model = None
@@ -43,18 +43,19 @@ def load_image(image_url: str) -> Image.Image:
 def startup_event():
     global model, processor
 
-    # 找到 ModelScope 下载后的目录
-    candidate_dir = MODEL_ID
-    local_candidate = os.path.join(MODEL_DIR, "hub", "models", MODEL_ID)
-    if os.path.exists(local_candidate):
-        candidate_dir = local_candidate
+    if not os.path.exists(os.path.join(MODEL_PATH, "config.json")):
+        raise RuntimeError(f"Local model path invalid: {MODEL_PATH}")
+
+    print(f"[startup] loading model from: {MODEL_PATH}")
+
+    dtype = "auto" if TORCH_DTYPE == "auto" else getattr(torch, TORCH_DTYPE)
 
     model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
-        candidate_dir,
-        torch_dtype="auto" if TORCH_DTYPE == "auto" else getattr(torch, TORCH_DTYPE),
+        MODEL_PATH,
+        torch_dtype=dtype,
         device_map="auto"
     )
-    processor = AutoProcessor.from_pretrained(candidate_dir)
+    processor = AutoProcessor.from_pretrained(MODEL_PATH)
 
 
 @app.get("/health")
@@ -67,12 +68,7 @@ def health():
 @app.post("/generate")
 def generate(req: GenerateRequest):
     try:
-        messages = [
-            {
-                "role": "user",
-                "content": []
-            }
-        ]
+        messages = [{"role": "user", "content": []}]
 
         if req.image_url:
             messages[0]["content"].append({"type": "image", "image": req.image_url})
