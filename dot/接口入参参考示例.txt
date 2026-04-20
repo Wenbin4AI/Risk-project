@@ -1,0 +1,19 @@
+{
+  "id": "",
+  "reportId": "",
+  "outReportId": "",
+  "trackPx": 5, 																											//临近点的像素，单位是像素，我这边有比例尺的，会换算给你像素尺。
+  "track": [
+    {
+      "callback_url": "http://outapi.synloop.top//api/notify/processImage/reportNotify/2041066831297101826",				//回调地址（注意下还是之前逻辑，分析完一张给我返回一张，回调的逻辑别动）
+      "image_url": "http://nas.synloop.top/safety-analysis/1902557939190169609/R20260406160614332/reportItem/3841.jpg",		//图片的链接地址
+      "objectKey": "R20260406160614332/change/2041066831297101826",															//不用在意
+      "device_type": "Insta360 X5",																							//设备类型，你那边应该不需要
+      "lang": "ch",																											//这个是文案翻译的文本，现在上了国际化，需要根据这个做翻译
+      "image_type": "02",				    																				//02是全景图片，01是普通图片后面有设备是普通图片抽帧的
+	  "pointX": 1000,																										//基于左上角的像素坐标
+	  "pointY": 1000,																										//基于左上角的像素坐标
+	  "pointZ": 1000 																										//如果没有这个参数表示是二维的，有表示是三维的
+    },
+  ]
+}
